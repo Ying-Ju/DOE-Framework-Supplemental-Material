@@ -327,6 +327,29 @@ pred_func <- function(ii,traindata,hold_out,TARGET,formul,var_numeric,assigned_s
 }
 
 
+#The following two ________________________________________________________________________
+
+# check_range: check if numerical values are in the corresponding range
+check_range <- function(df, vars, Num_Range){
+  out_range <- rep(NA, 13)
+  for (i in 1:length(vars)){
+    m <- min(df[,vars[i]])
+    M <- max(df[,vars[i]])
+    out_range[i] <- ifelse((m<Num_Range[i,1]|M>Num_Range[i,2]), 1, 0)
+  }
+  return(out_range)
+}
+#________________________________________________________________________
+
+# check_levels: check if categorical values are in our data
+check_levels <- function(df, vars, Cat_Levels){
+  CAT_match <- rep(NA, length(vars))
+  for (i in 1:length(vars)){
+    temp_level <- levels(as.factor(df[,vars[i]]))
+    CAT_match[i] <- ifelse(all(temp_level%in%Cat_Levels[[i]]), 0, 1)
+  }
+  return(CAT_match)
+}
 
 
 
