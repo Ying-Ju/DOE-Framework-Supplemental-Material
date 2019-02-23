@@ -352,4 +352,32 @@ check_levels <- function(df, vars, Cat_Levels){
 }
 
 
+#________________________________________________________________________
 
+# creating dummy variables for input data (this is for shinny app)
+dummy_maker_app<-function(input_data, char_var){
+  for (i in 1:ncol(input_data)){
+    if(names(input_data[i]) %in% char_var){
+      temp<-createDummyvars(input_data[i])
+      names(temp)<-paste(names(input_data[i]),levels(as.factor(input_data[,i])),sep="_")
+      
+      input_data<-cbind(input_data,temp)
+      if (length(levels(as.factor(input_data[,i])))!=1){
+        input_data[,ncol(input_data)]<-NULL
+      }else{
+        input_data[,ncol(input_data)]<-factor(input_data[,ncol(input_data)], levels = c(0,1))
+      }
+    }
+  }
+  input_data<-input_data[-which(names(input_data) %in% char_var)]
+  return(input_data)
+}
+
+#________________________________________________________________________
+
+# change all "U" to Unknown (this is for shinny app)
+find_U <- function(x){
+  col_index <- which(x=="U")
+  if (length(col_index)!=0) x[col_index] <- "UNKOWN"
+  return(x)
+}
